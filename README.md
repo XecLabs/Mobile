@@ -10,4 +10,9 @@ All our findings will be categorized, and organized by ```OS/AppName.txt```.
 | SIMs Mobile | [Check Report](https://gist.github.com/PerilGroup/ffe4afbbb7ed711895fe86d5110242de) |
 | Boom Beach | [Check Report](https://gist.github.com/PerilGroup/f8ac739eb98548ff704d1559d1794e9d) |
 
-### More very soon.
+
+#### APK discovery request?
+[@PerilGroup](https://twitter.com/perilgroup) - drop us a line on Twitter.
+
+```or just simply create a pull request``` :)
+
