@@ -1,6 +1,6 @@
 We've decied to go ahead and host some of our findings - rather it be educational, or informational. 
 
-All our findings will be categorized, and organized by ```OS/AppName/Report/```.
+All our findings will be categorized, and organized by ```OS/AppName.txt```.
 
 # Recent Discoveries:
 | Appliction | Report |
