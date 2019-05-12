@@ -1,0 +1,217 @@
+*************************************************************************
+**   AndroBugs Framework - Android App Security Vulnerability Scanner  **
+**                            version: 1.0.0                           **
+**     author: Yu-Cheng Lin (@AndroBugs, http://www.AndroBugs.com)     **
+**               contact: androbugs.framework@gmail.com                **
+*************************************************************************
+Platform: Android
+Package Name: in.mygov.mobile
+Package Version Name: 2.1.5
+Package Version Code: 98
+Min Sdk: 19
+Target Sdk: 28
+MD5   : b4a2b0aa72aeefb538af3fe94d032e06
+SHA1  : 3517b7fd93e7e0730f1f85ed52dd407102c60fba
+SHA256: 5acc9688c99afacedd9967a06e104e23365f17f36b53034eeededbc7057c56e6
+SHA512: f3b4229bf07bc4f49c9feaab5e20ff8b4b01f2bb2d00cfb2f70a6e620bf2170858dacdc2175e0efef1750921d50c5fc02bfa7f6953c7ca18534d6edcad126fdf
+Analyze Signature: 83958ea03aa8687ee02dd7d6703254411b5d3a675d35cfc5b38b6579c8025912b3be3540f6531ac0bb5a6b30ade2dbdcd4448418225997212bba94b7cbf6db52
+------------------------------------------------------------------------------------------------
+[Critical] <Implicit_Intent> Implicit Service Checking:
+           To ensure your app is secure, always use an explicit intent when starting a Service and DO NOT declare intent filters for your
+           services. Using an implicit intent to start a service is a security hazard because you cannot be certain what service will
+           respond to the intent, and the user cannot see which service starts.
+           Reference: http://developer.android.com/guide/components/intents-filters.html#Types
+               => com.google.firebase.messaging.FirebaseMessagingService
+               => com.google.firebase.iid.FirebaseInstanceIdService
+[Critical] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Custom Classes):
+           This app allows Self-defined HOSTNAME VERIFIER to accept all Common Names(CN).
+           This is a critical vulnerability and allows attackers to do MITM attacks with his valid certificate without your knowledge.
+           Case example:
+           (1)http://osvdb.org/96411
+           (2)http://www.wooyun.org/bugs/wooyun-2010-042710
+           (3)http://www.wooyun.org/bugs/wooyun-2010-052339
+           Also check Google doc: http://developer.android.com/training/articles/security-ssl.html (Caution: Replacing HostnameVerifier can
+           be very dangerous).
+           OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           Check this book to see how to solve this issue: http://goo.gl/BFb65r
+
+           To see what's the importance of Common Name(CN) verification.
+           Use Google Chrome to navigate:
+            - https://www.google.com   => SSL certificate is valid
+            - https://60.199.175.158/  => This is the IP address of google.com, but the CN is not match, making the certificate invalid. You
+           still can go Google.com but now you cannot distinguish attackers from normal users
+
+           Please check the code inside these methods:
+               Lorg/jsoup/helper/HttpConnection$Response$1;->verify(Ljava/lang/String; Ljavax/net/ssl/SSLSession;)Z
+[Critical] <SSL_Security> SSL Connection Checking:
+           URLs that are NOT under SSL (Total:8):
+               http://auth.mygov.in
+                   => Lin/mygov/mobile/UserProfiledata$11;->onClick(Landroid/content/DialogInterface; I)V
+               http://img.youtube.com/vi/
+                   => Lin/mygov/mobile/adaptor/Custom_taskSubmission;->databind(I Landroid/view/View;)V
+                   => Lin/mygov/mobile/adaptor/Custom_MySubmission;->databind(I Landroid/view/View;)V
+               http://play.google.com/store/apps/category/GAME
+                   => Lcom/google/android/gms/common/internal/GmsIntents;->createPlayStoreGamesIntent(Landroid/content/Context;)Landroid/con
+                    tent/Intent;
+               http://play.google.com/store/apps/details?id=
+                   => Lin/mygov/mobile/MainActivity;->ratethisapp()V
+               http://secure.mygov.in/
+                   => Lin/mygov/mobile/SurveyWebview;->onCreate(Landroid/os/Bundle;)V
+               http://www.youtube.com/watch?v=
+                   => Lin/mygov/mobile/adaptor/Custom_taskSubmission$3;->onClick(Landroid/view/View;)V
+                   => Lin/mygov/mobile/DialogMessage$3;->onClick(Landroid/view/View;)V
+                   => Lin/mygov/mobile/adaptor/Custom_MySubmission$3;->onClick(Landroid/view/View;)V
+               http://xmlpull.org/v1/doc/features.html#process-docdecl
+                   => Lcom/caverock/androidsvg/SVGParser;->parseUsingXmlPullParser(Ljava/io/InputStream; Z)V
+               http://xmlpull.org/v1/doc/features.html#process-namespaces
+                   => Lcom/caverock/androidsvg/SVGParser;->parseUsingXmlPullParser(Ljava/io/InputStream; Z)V
+[Critical] <SSL_Security> SSL Certificate Verification Checking:
+           This app DOES NOT check the validation of SSL Certificate. It allows self-signed, expired or mismatch CN certificates for SSL
+           connection.
+           This is a critical vulnerability and allows attackers to do MITM attacks without your knowledge.
+           If you are transmitting users' username or password, these sensitive information may be leaking.
+           Reference:
+           (1)OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           (2)Android Security book: http://goo.gl/BFb65r
+           (3)https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=134807561
+           This vulnerability is much more severe than Apple's "goto fail" vulnerability: http://goo.gl/eFlovw
+           Please do not try to create a "X509Certificate" and override "checkClientTrusted", "checkServerTrusted", and "getAcceptedIssuers"
+           functions with blank implementation.
+           We strongly suggest you use the existing API instead of creating your own X509Certificate class.
+           Please modify or remove these vulnerable code:
+               [Confirm Vulnerable]
+               => Lorg/jsoup/helper/HttpConnection$Response$2;
+                     -> used by: Lorg/jsoup/helper/HttpConnection$Response;->initUnSecureTSL()V
+               => Lcom/google/android/gms/common/net/zza;
+                     -> used by: Lcom/google/android/gms/common/net/SSLCertificateSocketFactory;-><clinit>()V
+[Warning]  External Storage Accessing:
+           External storage access found (Remember DO NOT write important files to external storages):
+               => Lin/mygov/mobile/CommonFunctions;->setImageUri(Landroid/content/Context;)Landroid/net/Uri; (0x4) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lin/mygov/mobile/library/PathUtil;->getPath(Landroid/content/Context; Landroid/net/Uri;)Ljava/lang/String; (0x5a) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lin/mygov/mobile/webapi/TinyDB;->setupFullPath(Ljava/lang/String;)Ljava/lang/String; (0x4) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lin/mygov/mobile/WishAwardShare;->getDataFolder(Landroid/content/Context;)Ljava/io/File; (0x1c) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+[Warning]  AndroidManifest Exported Components Checking:
+           Found "exported" components(except for Launcher) for receiving outside applications' actions (AndroidManifest.xml).
+           These components can be initilized by other apps. You should add or modify the attribute to [exported="false"] if you don't want
+           to.
+           You can also protect it with a customized permission with "signature" or higher protectionLevel and specify in
+           "android:permission" attribute.
+                  service => com.google.firebase.messaging.FirebaseMessagingService
+                  service => com.google.firebase.iid.FirebaseInstanceIdService
+[Warning] <Sensitive_Information> Getting ANDROID_ID:
+           This app has code getting the 64-bit number "Settings.Secure.ANDROID_ID".
+           ANDROID_ID seems a good choice for a unique device identifier. There are downsides: First, it is not 100% reliable on releases of
+           Android prior to 2.2 (Froyo).
+           Also, there has been at least one widely-observed bug in a popular handset from a major manufacturer, where every instance has
+           the same ANDROID_ID.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lin/mygov/mobile/CommonFunctions$LogOutApiasync;->doInBackground([Ljava/lang/Void;)Ljava/lang/String; (0x12) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/MainActivity$LogOutApiasync;->doInBackground([Ljava/lang/Void;)Ljava/lang/String; (0x12) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/measurement/zzjs;->zzc(Lcom/google/android/gms/internal/measurement/zzew;
+                    Lcom/google/android/gms/internal/measurement/zzdz;)V (0x810) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/MyFirebaseMessagingService;->SendtoServer(Ljava/lang/String;)V (0x56) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/LoginActivity;->onCreate(Landroid/os/Bundle;)V (0x292) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/SplashActivity;->onCreate(Landroid/os/Bundle;)V (0x1e) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/SplashActivity;->onCreate(Landroid/os/Bundle;)V (0x636) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lin/mygov/mobile/SplashActivity;->onCreate(Landroid/os/Bundle;)V (0x680) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+[Warning]  Codes for Sending SMS:
+           This app has code for sending SMS messages (sendDataMessage, sendMultipartTextMessage or sendTextMessage):
+               => Lin/mygov/mobile/PollDetails;->onRequestPermissionsResult(I [Ljava/lang/String; [I)V (0x2e) --->
+                    Landroid/telephony/SmsManager;->sendTextMessage(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Landroid/app/PendingIntent; Landroid/app/PendingIntent;)V
+[Warning] <WebView> WebView Local File Access Attacks Checking:
+           Found "setAllowFileAccess(true)" or not set(enabled by default) in WebView. The attackers could inject malicious script into
+           WebView and exploit the opportunity to access local resources. This can be mitigated or prevented by disabling local file system
+           access. (It is enabled by default)
+           Note that this enables or disables file system access only. Assets and resources are still accessible using file:///android_asset
+           and file:///android_res.
+           The attackers can use "mWebView.loadUrl("file:///data/data/[Your_Package_Name]/[File]");" to access app's local file.
+           Reference: (1)https://labs.mwrinfosecurity.com/blog/2012/04/23/adventures-with-android-webviews/
+                      (2)http://developer.android.com/reference/android/webkit/WebSettings.html#setAllowFileAccess(boolean)
+           Please add or modify "yourWebView.getSettings().setAllowFileAccess(false)" to your WebView:
+               Lin/mygov/mobile/BlogDetails;->onCreate(Landroid/os/Bundle;)V
+               Lin/mygov/mobile/CampaignDetails;->onCreate(Landroid/os/Bundle;)V
+               Lin/mygov/mobile/SurveyWebview;->onCreate(Landroid/os/Bundle;)V
+               Lin/mygov/mobile/TalkDetails$GetTalkById;->onPostExecute(Ljava/lang/String;)V
+               Lin/mygov/mobile/adaptor/Custom_wisheslist;->getView(I Landroid/view/View; Landroid/view/ViewGroup;)Landroid/view/View;
+[Warning] <WebView> WebView Potential XSS Attacks Checking:
+           Found "setJavaScriptEnabled(true)" in WebView, which could exposed to potential XSS attacks. Please check the web page code
+           carefully and sanitize the output:
+               => Lin/mygov/mobile/TalkDetails$GetTalkById;->onPostExecute(Ljava/lang/String;)V (0x7c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lin/mygov/mobile/adaptor/Custom_wisheslist;->getView(I Landroid/view/View; Landroid/view/ViewGroup;)Landroid/view/View;
+                    (0xa4) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lin/mygov/mobile/BlogDetails;->onCreate(Landroid/os/Bundle;)V (0x130) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lin/mygov/mobile/CampaignDetails;->onCreate(Landroid/os/Bundle;)V (0x16a) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lin/mygov/mobile/SurveyWebview;->onCreate(Landroid/os/Bundle;)V (0x120) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+[Notice]  AndroidManifest Adb Backup Checking:
+           ADB Backup is ENABLED for this app (default: ENABLED). ADB Backup is a good tool for backing up all of your files. If it's open
+           for this app, people who have your phone can copy all of the sensitive data for this app in your phone (Prerequisite: 1.Unlock
+           phone's screen 2.Open the developer mode). The sensitive data may include lifetime access token, username or password, etc.
+           Security case related to ADB Backup:
+           1.http://www.securityfocus.com/archive/1/530288/30/0/threaded
+           2.http://blog.c22.cc/advisories/cve-2013-5112-evernote-android-insecure-storage-of-pin-data-bypass-of-pin-protection/
+           3.http://nelenkov.blogspot.co.uk/2012/06/unpacking-android-backups.html
+           Reference: http://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+[Notice] <Command> Executing "root" or System Privilege Checking:
+           The app may has the code checking for "root" permission, mounting filesystem operations or monitoring system:
+               Lcom/google/android/gms/common/util/CrashUtils;->zza(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    I)Ljava/lang/String;  => '/system/bin/logcat'
+[Notice] <Database><#CVE-2011-3901#> Android SQLite Databases Vulnerability Checking:
+           This app is using Android SQLite databases but it's "NOT" suffering from SQLite Journal Information Disclosure Vulnerability.
+[Notice]  File Unsafe Delete Checking:
+           Everything you delete may be recovered by any user or attacker, especially rooted devices.
+           Please make sure do not use "file.delete()" to delete essential files.
+           Check this video: https://www.youtube.com/watch?v=tGw1fxUD-uY
+               => Lcom/bumptech/glide/disklrucache/DiskLruCache;->deleteIfExists(Ljava/io/File;)V (0xc) ---> Ljava/io/File;->delete()Z
+               => Lcom/bumptech/glide/disklrucache/DiskLruCache;->open(Ljava/io/File; I I J)Lcom/bumptech/glide/disklrucache/DiskLruCache;
+                    (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/bumptech/glide/disklrucache/DiskLruCache;->rebuildJournal()V (0x198) ---> Ljava/io/File;->delete()Z
+               => Lcom/bumptech/glide/disklrucache/DiskLruCache;->remove(Ljava/lang/String;)Z (0x4a) ---> Ljava/io/File;->delete()Z
+               => Lcom/bumptech/glide/disklrucache/Util;->a(Ljava/io/File;)V (0x2a) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/measurement/zzem;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x70)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/measurement/zzfe;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x40)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/google/firebase/iid/zzx;->a(Landroid/content/Context;)V (0x34) ---> Ljava/io/File;->delete()Z
+               => Lin/mygov/mobile/webapi/TinyDB;->saveBitmap(Ljava/lang/String; Landroid/graphics/Bitmap;)Z (0x22) --->
+                    Ljava/io/File;->delete()Z
+               => Lokhttp3/internal/io/FileSystem$1;->delete(Ljava/io/File;)V (0x0) ---> Ljava/io/File;->delete()Z
+               => Lokhttp3/internal/io/FileSystem$1;->deleteContents(Ljava/io/File;)V (0x2a) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/common/data/BitmapTeleporter;->zzcj()Ljava/io/FileOutputStream; (0x32) --->
+                    Ljava/io/File;->delete()Z
+[Notice] <Debug><Hacker> Codes for Checking Android Debug Mode:
+           Found codes for checking "ApplicationInfo.FLAG_DEBUGGABLE" in AndroidManifest.xml:
+               => Lcom/google/android/gms/common/GoogleSignatureVerifier;->zza
+                    (Landroid/content/pm/PackageInfo;)Lcom/google/android/gms/common/zzg;
+[Notice] <Hacker> APK Installing Source Checking:
+           This app has code checking APK installer sources(e.g. from Google Play, from Amazon, etc.). It might be used to check for whether
+           the app is hacked by the attackers.
+               => Lcom/google/android/gms/internal/measurement/zzjs;->zza(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String; Z
+                    Z Z J)Lcom/google/android/gms/internal/measurement/zzdz; (0x42) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/measurement/zzfc;->b()V (0x5a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+[Notice] <Signature><Hacker> Getting Signature Code Checking:
+           This app has code checking the package signature in the code. It might be used to check for whether the app is hacked by the
+           attackers.
+               => Lcom/google/android/gms/common/GooglePlayServicesUtilLight;->zza(Landroid/content/Context; Z I)I (0x50) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/util/UidVerifier;->isGooglePlayServicesUid(Landroid/content/Context; I)Z (0x24) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
