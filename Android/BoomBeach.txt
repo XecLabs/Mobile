@@ -1,0 +1,355 @@
+Platform: Android
+Package Name: com.supercell.boombeach
+Package Version Name: 37.81
+Package Version Code: 37081
+Min Sdk: 15
+Target Sdk: 28
+MD5   : f33da1b350a8469b036e6337e301fde7
+SHA1  : 557f7c3af66d9cd8029833b55a15755666d0a409
+SHA256: 725ecb704d93d58ff3a1b8f08f8a37ef6067de12152ec9e0a8eac680b3a52f03
+SHA512: 2b280e022c17b4922f477b31498d645b4496466a094335a7c28b5c62eeef7b6c97e7c9a54323a737410b1cadb935868d7f25f22c7e62a49a204d2803760ec53f
+Analyze Signature: eeb10d1ba9fac0a208bec6d72124c07ab6ac76a51560cce0265f23d68aabd6068ff16f7e197dee8c693e4a3fc467591990e184fd83512cecd671373f01e5ad7b
+------------------------------------------------------------------------------------------------
+[Critical] <Implicit_Intent> Implicit Service Checking:
+           To ensure your app is secure, always use an explicit intent when starting a Service and DO NOT declare intent filters for your
+           services. Using an implicit intent to start a service is a security hazard because you cannot be certain what service will
+           respond to the intent, and the user cannot see which service starts.
+           Reference: http://developer.android.com/guide/components/intents-filters.html#Types
+               => org.OpenUDID.OpenUDID_service
+               => com.supercell.titan.PushMessageService
+               => com.google.firebase.messaging.FirebaseMessagingService
+               => com.google.firebase.iid.FirebaseInstanceIdService
+[Critical] <SSL_Security> SSL Connection Checking:
+           URLs that are NOT under SSL (Total:1):
+               http://play.google.com/store/apps/details?id=com.facebook.orca
+                   => Lcom/facebook/messenger/MessengerUtils;->openMessengerInPlayStore(Landroid/content/Context;)V
+[Critical] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking:
+           Found a critical WebView "addJavascriptInterface" vulnerability. This method can be used to allow JavaScript to control the host
+           application.
+           This is a powerful feature, but also presents a security risk for applications targeted to API level JELLY_BEAN(4.2) or below,
+           because JavaScript could use reflection to access an injected object's public fields. Use of this method in a WebView containing
+           untrusted content could allow an attacker to manipulate the host application in unintended ways, executing Java code with the
+           permissions of the host application.
+           Reference:
+             1."http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface(java.lang.Object,
+           java.lang.String) "
+             2.https://labs.mwrinfosecurity.com/blog/2013/09/24/webview-addjavascriptinterface-remote-code-execution/
+             3.http://50.56.33.56/blog/?p=314
+             4.http://blog.trustlook.com/2013/09/04/alert-android-webview-addjavascriptinterface-code-execution-vulnerability/
+           Please modify the below code:
+               => Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task; (0x56) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+[Warning]  External Storage Accessing:
+           External storage access found (Remember DO NOT write important files to external storages):
+               => Lcom/facebook/internal/Utility;->refreshAvailableExternalStorage()V (0xc) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/facebook/internal/Utility;->refreshTotalExternalStorage()V (0xc) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+[Warning]  AndroidManifest Exported Components Checking:
+           Found "exported" components(except for Launcher) for receiving outside applications' actions (AndroidManifest.xml).
+           These components can be initilized by other apps. You should add or modify the attribute to [exported="false"] if you don't want
+           to.
+           You can also protect it with a customized permission with "signature" or higher protectionLevel and specify in
+           "android:permission" attribute.
+                  service => org.OpenUDID.OpenUDID_service
+                  service => com.supercell.titan.PushMessageService
+                  service => com.google.firebase.messaging.FirebaseMessagingService
+                  service => com.google.firebase.iid.FirebaseInstanceIdService
+[Warning] <Sensitive_Information> Getting IMEI and Device ID:
+           This app has code getting the "device id(IMEI)" but there are problems with this "TelephonyManager.getDeviceId()" approach.
+           1.Non-phones: Wifi-only devices or music players that don't have telephony hardware just don't have this kind of unique
+           identifier.
+           2.Persistence: On devices which do have this, it persists across device data wipes and factory resets. It's not clear at all if,
+           in this situation, your app should regard this as the same device.
+           3.Privilege:It requires READ_PHONE_STATE permission, which is irritating if you don't otherwise use or need telephony.
+           4.Bugs: We have seen a few instances of production phones for which the implementation is buggy and returns garbage, for example
+           zeros or asterisks.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lcom/a/a/a/a;->c()Z (0x14) ---> Landroid/telephony/TelephonyManager;->getDeviceId()Ljava/lang/String;
+[Warning] <Sensitive_Information> Getting ANDROID_ID:
+           This app has code getting the 64-bit number "Settings.Secure.ANDROID_ID".
+           ANDROID_ID seems a good choice for a unique device identifier. There are downsides: First, it is not 100% reliable on releases of
+           Android prior to 2.2 (Froyo).
+           Also, there has been at least one widely-observed bug in a popular handset from a major manufacturer, where every instance has
+           the same ANDROID_ID.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lcom/helpshift/support/i/i;->a(Lcom/helpshift/util/ab;)V (0x92) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/mobileapptracker/d;->run()V (0x13a) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/mobileapptracker/d;->run()V (0x170) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/supercell/titan/ApplicationUtilBase;->getAndroidID()Ljava/lang/String; (0x14) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/supercell/titan/GameApp;->onCreate(Landroid/os/Bundle;)V (0x2a6) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/supercell/titan/GameApp;->onCreate(Landroid/os/Bundle;)V (0x2f0) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lio/fabric/sdk/android/services/common/CommonUtils;->e(Landroid/content/Context;)Z (0xc) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lorg/OpenUDID/OpenUDID_manager;->d()V (0x10) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/measurement/internal/dv;->b(Lcom/google/android/gms/measurement/internal/zzag;
+                    Lcom/google/android/gms/measurement/internal/zzk;)V (0xb38) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+[Warning] <SSL_Security> SSL Certificate Verification Checking:
+           Please make sure this app has the conditions to check the validation of SSL Certificate. If it's not properly checked, it MAY
+           allows self-signed, expired or mismatch CN certificates for SSL connection.
+           This is a critical vulnerability and allows attackers to do MITM attacks without your knowledge.
+           If you are transmitting users' username or password, these sensitive information may be leaking.
+           Reference:
+           (1)OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           (2)Android Security book: http://goo.gl/BFb65r
+           (3)https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=134807561
+           This vulnerability is much more severe than Apple's "goto fail" vulnerability: http://goo.gl/eFlovw
+           Please do not try to create a "X509Certificate" and override "checkClientTrusted", "checkServerTrusted", and "getAcceptedIssuers"
+           functions with blank implementation.
+           We strongly suggest you use the existing API instead of creating your own X509Certificate class.
+           Please modify or remove these vulnerable code:
+               --------------------------------------------------
+               [Maybe Vulnerable (Please manually confirm)]
+               => Lio/fabric/sdk/android/services/network/l;
+                     -> used by: Lio/fabric/sdk/android/services/network/b;->c()Ljavax/net/ssl/SSLSocketFactory;
+[Warning] <WebView> WebView Local File Access Attacks Checking:
+           Found "setAllowFileAccess(true)" or not set(enabled by default) in WebView. The attackers could inject malicious script into
+           WebView and exploit the opportunity to access local resources. This can be mitigated or prevented by disabling local file system
+           access. (It is enabled by default)
+           Note that this enables or disables file system access only. Assets and resources are still accessible using file:///android_asset
+           and file:///android_res.
+           The attackers can use "mWebView.loadUrl("file:///data/data/[Your_Package_Name]/[File]");" to access app's local file.
+           Reference: (1)https://labs.mwrinfosecurity.com/blog/2012/04/23/adventures-with-android-webviews/
+                      (2)http://developer.android.com/reference/android/webkit/WebSettings.html#setAllowFileAccess(boolean)
+           Please add or modify "yourWebView.getSettings().setAllowFileAccess(false)" to your WebView:
+               Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task;
+               Lcom/facebook/internal/WebDialog;->setUpWebView(I)V
+               Lcom/helpshift/support/webkit/CustomWebView;-><init>(Landroid/content/Context; Landroid/util/AttributeSet;)V
+               Lcom/mobileapptracker/e;->run()V
+               Lcom/supercell/titan/ee;->run()V
+[Warning] <WebView> WebView Potential XSS Attacks Checking:
+           Found "setJavaScriptEnabled(true)" in WebView, which could exposed to potential XSS attacks. Please check the web page code
+           carefully and sanitize the output:
+               => Lcom/facebook/internal/WebDialog;->setUpWebView(I)V (0x62) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/helpshift/support/webkit/CustomWebView;-><init>(Landroid/content/Context; Landroid/util/AttributeSet;)V (0x1c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/supercell/titan/ee;->run()V (0xb8) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task; (0x2a) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+[Notice]  AndroidManifest Adb Backup Checking:
+           ADB Backup is ENABLED for this app (default: ENABLED). ADB Backup is a good tool for backing up all of your files. If it's open
+           for this app, people who have your phone can copy all of the sensitive data for this app in your phone (Prerequisite: 1.Unlock
+           phone's screen 2.Open the developer mode). The sensitive data may include lifetime access token, username or password, etc.
+           Security case related to ADB Backup:
+           1.http://www.securityfocus.com/archive/1/530288/30/0/threaded
+           2.http://blog.c22.cc/advisories/cve-2013-5112-evernote-android-insecure-storage-of-pin-data-bypass-of-pin-protection/
+           3.http://nelenkov.blogspot.co.uk/2012/06/unpacking-android-backups.html
+           Reference: http://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+[Notice] <Command> Executing "root" or System Privilege Checking:
+           The app may has the code checking for "root" permission, mounting filesystem operations or monitoring system:
+               Lcom/a/a/a/a;->g()Z  => '/system/bin/'
+               Lcom/a/a/a/a;->g()Z  => '/system/bin/netcfg'
+               Lcom/a/a/a/a;-><clinit>()V  => '/system/bin/nox-prop'
+[Notice] <Database><#CVE-2011-3901#> Android SQLite Databases Vulnerability Checking:
+           This app is using Android SQLite databases but it's "NOT" suffering from SQLite Journal Information Disclosure Vulnerability.
+[Notice]  File Unsafe Delete Checking:
+           Everything you delete may be recovered by any user or attacker, especially rooted devices.
+           Please make sure do not use "file.delete()" to delete essential files.
+           Check this video: https://www.youtube.com/watch?v=tGw1fxUD-uY
+               => Lcom/crashlytics/android/core/CrashlyticsController;->deleteSessionPartFilesFor(Ljava/lang/String;)V (0x14) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/CrashlyticsController;->recursiveDelete(Ljava/io/File;)V (0x2c) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/CrashlyticsController;->retainSessions([Ljava/io/File; Ljava/util/Set;)V (0x52) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/CrashlyticsController;->retainSessions([Ljava/io/File; Ljava/util/Set;)V (0x96) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/CrashlyticsController;->doCleanInvalidTempFiles([Ljava/io/File;)V (0x100) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/CrashlyticsFileMarker;->remove()Z (0x8) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/LogFileManager;->discardOldLogFiles(Ljava/util/Set;)V (0x38) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/Utils;->capFileCount(Ljava/io/File; Ljava/io/FilenameFilter; I Ljava/util/Comparator;)I
+                    (0x28) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x54) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x7a) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x96) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->saveEventsToDisk(Lcom/facebook/appevents/PersistedEvents;)V (0x54) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$2;->run()V (0x10) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$BufferFile;->deleteAll(Ljava/io/File;)V (0x20) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->renameToTargetAndTrim(Ljava/lang/String; Ljava/io/File;)V (0x22) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->trim()V (0x198) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->openPutStream(Ljava/lang/String; Ljava/lang/String;)Ljava/io/OutputStream; (0xc)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/NativeAppCallAttachmentStore;->addAttachments(Ljava/util/Collection;)V (0x104) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/Utility;->deleteDirectory(Ljava/io/File;)V (0x3e) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/measurement/ad;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x64)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/measurement/internal/et;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x96)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/measurement/internal/m;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x3c) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/tagmanager/r;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x22) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/firebase/iid/y;->b()V (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/common/domain/a;->a(Lcom/helpshift/conversation/dto/d;)V (0x22) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/support/az;->a(Landroid/content/Context; Lcom/helpshift/common/platform/aa; Lcom/helpshift/common/domain/k;
+                    Lcom/helpshift/support/j; Lcom/helpshift/support/ab;)V (0x2ae) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/support/az;->a(Landroid/content/Context; Lcom/helpshift/common/platform/aa; Lcom/helpshift/common/domain/k;
+                    Lcom/helpshift/support/j; Lcom/helpshift/support/ab;)V (0x2fe) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/support/az;->a(Landroid/content/Context; Lcom/helpshift/common/platform/aa; Lcom/helpshift/common/domain/k;
+                    Lcom/helpshift/support/j; Lcom/helpshift/support/ab;)V (0x36a) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/support/az;->a(Landroid/content/Context; Lcom/helpshift/common/platform/aa; Lcom/helpshift/common/domain/k;
+                    Lcom/helpshift/support/j; Lcom/helpshift/support/ab;)V (0x38a) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/id/e;->run()V (0x8c) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/id/ui/g/a;->b(Ljava/lang/String; [B)Z (0x48) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/id/ui/g/h;->a(Ljava/lang/String; [B)Z (0x5c) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/id/ui/g/o;->a(Ljava/lang/String; [B)Z (0x74) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/titan/NativeHTTPConnection;->a(Ljava/io/File; Ljava/io/File;)Z (0x42) ---> Ljava/io/File;->delete()Z
+               => Lcom/supercell/titan/NativeHTTPConnection;->c()Z (0x1a2) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/InvalidSessionReport;->remove()V (0x3e) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/NativeSessionReport;->remove()V (0x42) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/NativeSessionReport;->remove()V (0x7c) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/QueueFileLogStore;->deleteLogFile()V (0xa) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/core/SessionReport;->remove()V (0x36) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$1;->onClose()V (0x24) ---> Ljava/io/File;->delete()Z
+               => Lcom/helpshift/conversation/activeconversation/a;->m()V (0x64) ---> Ljava/io/File;->delete()Z
+               => Lio/fabric/sdk/android/services/b/j;->a(Ljava/lang/String;)V (0x52) ---> Ljava/io/File;->delete()Z
+               => Lio/fabric/sdk/android/services/b/j;->a(Ljava/lang/String;)V (0x88) ---> Ljava/io/File;->delete()Z
+               => Lio/fabric/sdk/android/services/b/j;->a(Ljava/util/List;)V (0x4a) ---> Ljava/io/File;->delete()Z
+               => Lio/fabric/sdk/android/services/b/j;->d()V (0xe) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/common/data/BitmapTeleporter;->b()Ljava/io/FileOutputStream; (0x32) ---> Ljava/io/File;->delete()Z
+[Notice] <Debug><Hacker> Codes for Checking Android Debug Mode:
+           Found codes for checking "ApplicationInfo.FLAG_DEBUGGABLE" in AndroidManifest.xml:
+               => Lcom/google/android/gms/common/g;->a (Ljava/lang/String; I)Lcom/google/android/gms/common/u;
+               => Lio/fabric/sdk/android/services/common/CommonUtils;->h (Landroid/content/Context;)Z
+[Notice] <Hacker> APK Installing Source Checking:
+           This app has code checking APK installer sources(e.g. from Google Play, from Amazon, etc.). It might be used to check for whether
+           the app is hacked by the attackers.
+               => Lcom/facebook/internal/AttributionIdentifiers;->getInstallerPackageName(Landroid/content/Context;)Ljava/lang/String;
+                    (0x14) ---> Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/analytics/r;->a()Lcom/google/android/gms/internal/measurement/hz; (0x38) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/mobileapptracker/MATParameters;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;)Z (0x11a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/measurement/internal/dv;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String; Z Z Z
+                    J Ljava/lang/String;)Lcom/google/android/gms/measurement/internal/zzk; (0x3e) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lio/fabric/sdk/android/services/common/z;->load(Landroid/content/Context;)Ljava/lang/Object; (0x10) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/measurement/internal/j;->u()V (0x56) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+[Notice] <KeyStore><Hacker> KeyStore Protection Information:
+           The Keystores below are "protected" by password and seem using SSL-pinning (Total: 1). You can use "Portecle" tool to manage the
+           certificates in the KeyStore:
+               => Lio/fabric/sdk/android/services/network/m;->a(Ljava/io/InputStream; Ljava/lang/String;)Ljava/security/KeyStore; (0x1e)
+                    ---> Ljava/security/KeyStore;->load(Ljava/io/InputStream; [C)V
+[Notice] <Signature><Hacker> Getting Signature Code Checking:
+           This app has code checking the package signature in the code. It might be used to check for whether the app is hacked by the
+           attackers.
+               => Lcom/facebook/FacebookSdk;->getApplicationSignature(Landroid/content/Context;)Ljava/lang/String; (0x28) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/facebook/internal/FacebookSignatureValidator;->validateSignature(Landroid/content/Context; Ljava/lang/String;)Z
+                    (0x3a) ---> Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/f;->zza(Landroid/content/Context; Z I)I (0x42) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/g;->a(Ljava/lang/String; I)Lcom/google/android/gms/common/u; (0x1c) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/util/r;->a(Landroid/content/Context; I)Z (0x24) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/internal/instantapps/j;->a(Landroid/content/Context;)Z (0x12) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/supercell/titan/ApplicationUtilBase;->getAppVersion()Ljava/lang/String; (0x1c) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/supercell/titan/GameApp;->e()I (0x14) ---> Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;
+                    I)Landroid/content/pm/PackageInfo;
+[Notice]  Native Library Loading Checking:
+           Native library loading codes(System.loadLibrary(...)) found:
+               [libfmod.so]
+               => Lcom/supercell/titan/GameApp;->onCreate(Landroid/os/Bundle;)V (0x346) --->
+                    Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libfmodL.so]
+               => Lcom/supercell/titan/GameApp;->onCreate(Landroid/os/Bundle;)V (0x356) --->
+                    Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libg.so]
+               => Lcom/supercell/titan/GameApp;->onCreate(Landroid/os/Bundle;)V (0x370) --->
+                    Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libcrashlytics.so]
+               => Lcom/crashlytics/android/ndk/JniNativeApi;-><clinit>()V (0x4) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+[Notice]  AndroidManifest Exported Components Checking 2:
+           Found "exported" components(except for Launcher) for receiving Google's "Android" actions (AndroidManifest.xml):
+                 receiver => com.mobileapptracker.Tracker
+[Info] <Command> Runtime Command Checking:
+           This app is not using critical function 'Runtime.getRuntime().exec("...")'.
+[Info] <Database> SQLiteDatabase Transaction Deprecated Checking:
+           Ignore checking "SQLiteDatabase:beginTransactionNonExclusive" because your set minSdk >= 11.
+[Info] <Database> Android SQLite Databases Encryption (SQLite Encryption Extension (SEE)):
+           This app is "NOT" using SQLite Encryption Extension (SEE) on Android (http://www.sqlite.org/android) to encrypt or decrpyt
+           databases.
+[Info] <Database> Android SQLite Databases Encryption (SQLCipher):
+           This app is "NOT" using SQLCipher(http://sqlcipher.net/) to encrypt or decrpyt databases.
+[Info] <Debug> Android Debug Mode Checking:
+           DEBUG mode is OFF(android:debuggable="false") in AndroidManifest.xml.
+[Info]  Dynamic Code Loading:
+           No dynamic code loading(DexClassLoader) found.
+[Info] <#BID 64208, CVE-2013-6271#> Fragment Vulnerability Checking:
+           Did not detect the vulnerability of "Fragment" dynamically loading into "PreferenceActivity" or "SherlockPreferenceActivity"
+[Info] <Framework> Framework - MonoDroid:
+           This app is NOT using MonoDroid Framework (http://xamarin.com/android).
+[Info] <Hacker> Base64 String Encryption:
+           No encoded Base64 String or Urls found.
+[Info] <Database><Hacker> Key for Android SQLite Databases Encryption:
+           Did not find using the symmetric key(PRAGMA key) to encrypt the SQLite databases (It's still possible that it might use but we
+           did not find out).
+[Info] <KeyStore><Hacker> KeyStore File Location:
+           Did not find any possible BKS keystores or certificate keystore file (Notice: It does not mean this app does not use keysotre):
+[Info] <Hacker> Code Setting Preventing Screenshot Capturing:
+           Did not detect this app has code setting preventing screenshot capturing.
+[Info]  HttpURLConnection Android Bug Checking:
+           Ignore checking "http.keepAlive" because you're not using "HttpURLConnection" and min_Sdk > 8.
+[Info] <KeyStore> KeyStore Type Checking:
+           KeyStore 'BKS' type check OK
+[Info]  Google Cloud Messaging Suggestion:
+           Nothing to suggest.
+[Info] <#CVE-2013-4787#> Master Key Type I Vulnerability:
+           No Master Key Type I Vulnerability in this APK.
+[Info]  App Sandbox Permission Checking:
+           No security issues "MODE_WORLD_READABLE" or "MODE_WORLD_WRITEABLE" found on 'openOrCreateDatabase' or 'openOrCreateDatabase2' or
+           'getDir' or 'getSharedPreferences' or 'openFileOutput'
+[Info]  AndroidManifest Dangerous ProtectionLevel of Permission Checking:
+           No "dangerous" protection level customized permission found (AndroidManifest.xml).
+[Info]  AndroidManifest PermissionGroup Checking:
+           PermissionGroup in permission tag of AndroidManifest sets correctly.
+[Info]  AndroidManifest "intent-filter" Settings Checking:
+           "intent-filter" of AndroidManifest.xml check OK.
+[Info]  AndroidManifest Normal ProtectionLevel of Permission Checking:
+           No default or "normal" protection level customized permission found (AndroidManifest.xml).
+[Info] <#CVE-2013-6272#> AndroidManifest Exported Lost Prefix Checking:
+           No exported components that forgot to add "android:" prefix.
+[Info]  AndroidManifest ContentProvider Exported Checking:
+           No exported "ContentProvider" found (AndroidManifest.xml).
+[Info]  Codes for Sending SMS:
+           Did not detect this app has code for sending SMS messages (sendDataMessage, sendMultipartTextMessage or sendTextMessage).
+[Info] <System> AndroidManifest sharedUserId Checking:
+           This app does not use "android.uid.system" sharedUserId.
+[Info] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Custom Classes):
+           Self-defined HOSTNAME VERIFIER checking OK.
+[Info] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Fields):
+           Critical vulnerability "ALLOW_ALL_HOSTNAME_VERIFIER" field setting or "AllowAllHostnameVerifier" class instance not found.
+[Info] <SSL_Security> SSL Implementation Checking (Insecure component):
+           Did not detect SSLSocketFactory by insecure method "getInsecure".
+[Info] <SSL_Security> SSL Implementation Checking (HttpHost):
+           DEFAULT_SCHEME_NAME for HttpHost check: OK
+[Info] <SSL_Security> SSL Implementation Checking (WebViewClient for WebView):
+           Did not detect critical usage of "WebViewClient"(MITM Vulnerability).
+[Info]  Unnecessary Permission Checking:
+           Permission 'android.permission.ACCESS_MOCK_LOCATION' sets correctly.
+[Info]  Accessing the Internet Checking:
+           This app is using the Internet via HTTP protocol.
+[Info]  AndroidManifest System Use Permission Checking:
+           No system-level critical use-permission found
