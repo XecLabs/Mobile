@@ -1,0 +1,591 @@
+Platform: Android
+Package Name: com.igg.android.lordsmobile
+Package Version Name: 1.96
+Package Version Code: 222
+Min Sdk: 15
+Target Sdk: 27
+MD5   : 86042d719a6361749c11096698a2d351
+SHA1  : 93dfec91180aa87d02fef8676c38a8be53651d71
+SHA256: 5dfeedea515bd1e13e290d76e2d717e5be1590783f02003434c40c4b866f17f4
+SHA512: 5a9a05fb65d9d79f98ab3d40557ce3e3741193c1a7ce84cb26cdac0feeb7aa1fdeb8ecd238d38593d43395479ddf44ef62984b5f5bb5132ac58d7f47b389ca19
+Analyze Signature: 13265ff0de7997488781614431c8717cf310c60dd6b01d604d7528918f789d5746cec83aba21d2d2dec8d60eff4f76ee2608337af9d46f5b10fb41208f4fc291
+------------------------------------------------------------------------------------------------
+[Critical] <Hacker> Base64 String Encryption:
+           Found Base64 encoding "String(s)" (Total: 2). We cannot guarantee all of the Strings are Base64 encoding and also we will not
+           show you the decoded binary file:
+               com.android.vending.licensing.ILicensingService
+                   ->Original Encoding String: Y29tLmFuZHJvaWQudmVuZGluZy5saWNlbnNpbmcuSUxpY2Vuc2luZ1NlcnZpY2U=
+                   ->From class: Lcom/unity3d/plugin/downloader/d/d;->a(Lcom/unity3d/plugin/downloader/d/h;)V
+               com.android.vending
+                   ->Original Encoding String: Y29tLmFuZHJvaWQudmVuZGluZw==
+                   ->From class: Lcom/unity3d/plugin/downloader/d/d;->a(Lcom/unity3d/plugin/downloader/d/h;)V
+[Critical] <KeyStore><Hacker> KeyStore Protection Checking:
+           The Keystores below seem using "byte array" or "hard-coded cert info" to do SSL pinning (Total: 3). Please manually check:
+               => Lcom/google/api/client/http/apache/ApacheHttpTransport$Builder;->trustCertificatesFromStream(Ljava/io/InputStream;)Lcom/go
+                    ogle/api/client/http/apache/ApacheHttpTransport$Builder; (0xa) ---> Ljava/security/KeyStore;->load(Ljava/io/InputStream;
+                    [C)V
+               => Lcom/google/api/client/http/javanet/NetHttpTransport$Builder;->trustCertificatesFromStream(Ljava/io/InputStream;)Lcom/goog
+                    le/api/client/http/javanet/NetHttpTransport$Builder; (0xa) ---> Ljava/security/KeyStore;->load(Ljava/io/InputStream;
+                    [C)V
+               => Lcom/google/api/client/testing/json/webtoken/TestCertificates$CertData;->getTrustManager()Ljavax/net/ssl/X509TrustManager;
+                    (0x12) ---> Ljava/security/KeyStore;->load(Ljava/io/InputStream; [C)V
+[Critical]  App Sandbox Permission Checking:
+           Security issues "MODE_WORLD_READABLE" or "MODE_WORLD_WRITEABLE" found (Please check:
+           https://www.owasp.org/index.php/Mobile_Top_10_2014-M2):
+               [getSharedPreferences]
+               => Lcom/google/android/gms/flags/impl/zzb$1;->zzyI()Landroid/content/SharedPreferences; (0xa) --->
+                    Landroid/content/Context;->getSharedPreferences(Ljava/lang/String; I)Landroid/content/SharedPreferences;
+               => Lcom/google/android/gms/internal/zzcs;->zzn(Landroid/content/Context;)Landroid/content/SharedPreferences; (0x6) --->
+                    Landroid/content/Context;->getSharedPreferences(Ljava/lang/String; I)Landroid/content/SharedPreferences;
+               --------------------------------------------------
+[Critical] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Custom Classes):
+           This app allows Self-defined HOSTNAME VERIFIER to accept all Common Names(CN).
+           This is a critical vulnerability and allows attackers to do MITM attacks with his valid certificate without your knowledge.
+           Case example:
+           (1)http://osvdb.org/96411
+           (2)http://www.wooyun.org/bugs/wooyun-2010-042710
+           (3)http://www.wooyun.org/bugs/wooyun-2010-052339
+           Also check Google doc: http://developer.android.com/training/articles/security-ssl.html (Caution: Replacing HostnameVerifier can
+           be very dangerous).
+           OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           Check this book to see how to solve this issue: http://goo.gl/BFb65r
+
+           To see what's the importance of Common Name(CN) verification.
+           Use Google Chrome to navigate:
+            - https://www.google.com   => SSL certificate is valid
+            - https://60.199.175.158/  => This is the IP address of google.com, but the CN is not match, making the certificate invalid. You
+           still can go Google.com but now you cannot distinguish attackers from normal users
+
+           Please check the code inside these methods:
+               Lcom/google/api/client/util/SslUtils$2;->verify(Ljava/lang/String; Ljavax/net/ssl/SSLSession;)Z
+[Critical] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Fields):
+           This app does not check the validation of the CN(Common Name) of the SSL certificate ("ALLOW_ALL_HOSTNAME_VERIFIER" field or
+           "AllowAllHostnameVerifier" class).
+           This is a critical vulnerability and allows attackers to do MITM attacks with his valid certificate without your knowledge.
+           Case example:
+           (1)http://osvdb.org/96411
+           (2)http://www.wooyun.org/bugs/wooyun-2010-042710
+           (3)http://www.wooyun.org/bugs/wooyun-2010-052339
+           Also check Google doc: http://developer.android.com/training/articles/security-ssl.html (Caution: Replacing HostnameVerifier can
+           be very dangerous).
+           OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           Check this book to see how to solve this issue: http://goo.gl/BFb65r
+
+           To see what's the importance of Common Name(CN) verification.
+           Use Google Chrome to navigate:
+            - https://www.google.com   => SSL certificate is valid
+            - https://60.199.175.158/  => This is the IP address of google.com, but the CN is not match, making the certificate invalid. You
+           still can go Google.com but now you cannot distinguish attackers from normal users
+
+           Please check the code inside these methods:
+               => Lcom/google/api/client/http/apache/ApacheHttpTransport$Builder;->doNotValidateCertificate
+                    ()Lcom/google/api/client/http/apache/ApacheHttpTransport$Builder;
+[Critical] <SSL_Security> SSL Connection Checking:
+           URLs that are NOT under SSL (Total:77):
+               http://app-promotion.fantasyplus.game.tw
+                   => Lcom/igg/sdk/promotion/IGGPromotionService;->APIforAction(Ljava/lang/String;)Ljava/lang/String;
+               http://app-promotion.igg.com
+                   => Lcom/igg/sdk/promotion/IGGPromotionService;->APIforAction(Ljava/lang/String;)Ljava/lang/String;
+               http://cgi.fantasyplus.game.tw:9000
+                   => Lcom/igg/sdk/IGGURLHelper;->getCGIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://cgi.igg.com:9000
+                   => Lcom/igg/sdk/IGGURLHelper;->getCGIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://cgi.m.176.com:9000
+                   => Lcom/igg/sdk/IGGURLHelper;->getCGIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://cog-snd.igg.com/shop.php?g_id=%s&signed_key=%s
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->ThirdPartPayment()V
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->GetThirdPartPayment()Ljava/lang/String;
+               http://collect.fantasyplus.game.tw/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.fantasyplus.game.tw/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.fantasyplus.game.tw/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.nl.fantasyplus.game.tw/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.nl.fantasyplus.game.tw/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.nl.fantasyplus.game.tw/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.nl.igg.com/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.nl.igg.com/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.nl.igg.com/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.sg.fantasyplus.game.tw/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.sg.fantasyplus.game.tw/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.sg.fantasyplus.game.tw/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.sg.igg.com/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.sg.igg.com/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.sg.igg.com/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.snd.fantasyplus.game.tw/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.snd.fantasyplus.game.tw/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.snd.fantasyplus.game.tw/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.snd.igg.com/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.snd.igg.com/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.snd.igg.com/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.tw.igg.com/adlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->ADXLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://collect.tw.igg.com/bugcollect.php
+                   => Lcom/igg/sdk/incident/IGGIncidentCollector;->saveIncident(Lcom/igg/sdk/incident/IGGIncident; Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGIDC; Lcom/igg/sdk/incident/IGGIncidentCollector$IncidentListener;)V
+               http://collect.tw.igg.com/loginlog.php
+                   => Lcom/igg/sdk/log/IGGLoggerHelper;->loginLogAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://config-snd.igg.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getAppConfigURL(Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGAppConfigContentFormat;)Ljava/lang/String;
+               http://config.igg.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getAppConfigURL(Ljava/lang/String; Lcom/igg/sdk/IGGSDKConstant$IGGAppConfigContentFormat;
+                    Lcom/igg/sdk/IGGSDKConstant$CDNType;)Ljava/lang/String;
+               http://config.m.176.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getAppConfigURL(Ljava/lang/String; Lcom/igg/sdk/IGGSDKConstant$IGGAppConfigContentFormat;
+                    Lcom/igg/sdk/IGGSDKConstant$CDNType;)Ljava/lang/String;
+                   => Lcom/igg/sdk/IGGURLHelper;->getAppConfigURL(Ljava/lang/String;
+                    Lcom/igg/sdk/IGGSDKConstant$IGGAppConfigContentFormat;)Ljava/lang/String;
+               http://crm
+                   => Lcom/igg/sdk/IGGURLHelper;->getCRMApiURL()Ljava/lang/String;
+               http://crm-nl.
+                   => Lcom/igg/sdk/IGGURLHelper;->getCRMApiURL()Ljava/lang/String;
+               http://crm-snd.igg.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getCRMApiURL()Ljava/lang/String;
+               http://crm.igg.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getCRMApiURL()Ljava/lang/String;
+               http://crm.m.176.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getCRMApiURL()Ljava/lang/String;
+               http://developers.facebook.com/android
+                   => Lcom/igg/iggsdkbusiness/FBHelp/FacebookHelper;->ShareOnFacebook()V
+               http://dkv3ys1ydcyet.cloudfront.net
+                   => Lcom/igg/sdk/IGGURLHelper;->getAppConfigURL(Ljava/lang/String; Lcom/igg/sdk/IGGSDKConstant$IGGAppConfigContentFormat;
+                    Lcom/igg/sdk/IGGSDKConstant$CDNType;)Ljava/lang/String;
+               http://gamelive.wegamers.com/views/instrolist.html?
+                   => Lcom/igg/H5_Plugin$1;->run()V
+               http://google.com/
+                   => Lcom/google/api/client/testing/http/HttpTesting;-><clinit>()V
+               http://goto-eu.igg.com/game/livechat/
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnLogin_GlobalEdition(B)V
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnShop_GlobalEdition(B)V
+               http://goto-sg.igg.com/game/livechat/
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnLogin_GlobalEdition(B)V
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnShop_GlobalEdition(B)V
+               http://goto-tw.igg.com/game/service/
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SubmitQuestion()V
+               http://goto.fantasyplus.game.tw
+                   => Lcom/igg/sdk/IGGURLBundle;-><init>()V
+               http://goto.igg.com
+                   => Lcom/igg/sdk/IGGURLBundle;-><init>()V
+               http://goto.igg.com/game/livechat/
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnLogin_GlobalEdition(B)V
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->SupportLiveOnShop_GlobalEdition(B)V
+               http://lo.tw.igg.com/event/cdkey/?from=phone&game_id=
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->ExchangeUrl()Ljava/lang/String;
+               http://login.m.igg.com/
+                   => Lcom/igg/sdk/IGGURLHelper;->getWeChatAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://login.m.igg.com/auth
+                   => Lcom/igg/sdk/service/IGGLoginService;->thirdWechatAccountLogin(Lcom/igg/sdk/bean/IGGLoginInfo;
+                    Lcom/igg/sdk/service/IGGLoginService$LoginOperationListener;)V
+               http://lordsmobile.igg.com/event/deep_link/?from=phone&game_id=
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->ParseDeepLink()V
+               http://nl-storage.igg.com/
+                   => Lcom/igg/sdk/IGGStorage;->getAPIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://pay-app.igg.com/
+                   => Lcom/igg/sdk/IGGURLHelper;->getPayGatewayAPI(Lcom/igg/sdk/IGGSDKConstant$PayDNS; Ljava/lang/String;)Ljava/lang/String;
+               http://pay-fb.igg.com/api/get_game_card.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getProductAPI()Ljava/lang/String;
+               http://pay-fb.igg.com/platform_mixing/?g_id=
+                   => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->OpenThirdPartyPayment(I)V
+               http://pay.fantasyplus.game.tw/api/get_game_card.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getProductAPI()Ljava/lang/String;
+               http://pay.m.176.com/api/get_game_card.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getProductAPI()Ljava/lang/String;
+               http://pay.skyunion.com/
+                   => Lcom/igg/sdk/IGGURLHelper;->getPayGatewayAPI(Lcom/igg/sdk/IGGSDKConstant$PayDNS; Ljava/lang/String;)Ljava/lang/String;
+               http://pay.skyunion.com/alipay_mobile/create_order.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getAlipayAPI()Ljava/lang/String;
+               http://pay.skyunion.com/bluemobile/get_transaction.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getProductOrderNumberAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://pay.skyunion.com/mycard/get_transaction.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getProductOrderNumberAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://pay.skyunion.com/wechat/create_order.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getWeiXinPayAPI()Ljava/lang/String;
+               http://plus.google.com/
+                   => Lcom/google/android/gms/common/internal/zzo;-><clinit>()V
+               http://push.fantasyplus.game.tw
+                   => Lcom/igg/sdk/IGGURLHelper;->getDeviceRegisterAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://push.igg.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getDeviceRegisterAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://push.m.176.com
+                   => Lcom/igg/sdk/IGGURLHelper;->getDeviceRegisterAPI(Ljava/lang/String;)Ljava/lang/String;
+               http://sg-storage.igg.com/
+                   => Lcom/igg/sdk/IGGStorage;->getAPIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://snd-storage.igg.com/
+                   => Lcom/igg/sdk/IGGStorage;->getAPIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://translate-eu.igg.com/api/translate.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getTranslateAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://translate-sg.igg.com/api/translate.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getTranslateAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://translate-tw.igg.com/api/translate.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getTranslateAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://translate.igg.com/api/translate.php
+                   => Lcom/igg/sdk/IGGURLHelper;->getTranslateAPI(Lcom/igg/sdk/IGGSDKConstant$IGGIDC;)Ljava/lang/String;
+               http://tw-storage.igg.com/
+                   => Lcom/igg/sdk/IGGStorage;->getAPIURL(Ljava/lang/String;)Ljava/lang/String;
+               http://www.google.com
+                   => Lcom/google/android/gms/internal/zzio$zza;-><init>(Landroid/content/Context;)V
+                   => Lcom/igg/iggsdkbusiness/IGGWebView;-><init>()V
+                   => Lcom/igg/iggsdkbusiness/MainActivity;->onCreate(Landroid/os/Bundle;)V
+               http://www.igg.com/about/privacy_policy.php
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->GetPrivacyPolicy()Ljava/lang/String;
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->PrivacyPolicy()V
+               http://www.igg.com/member/agreement.php
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->GetTermsofService()Ljava/lang/String;
+                   => Lcom/igg/iggsdkbusiness/IGGUrlHelper;->TermsofService()V
+[Critical] <SSL_Security> SSL Implementation Checking (WebViewClient for WebView):
+           DO NOT use "handler.proceed();" inside those methods in extended "WebViewClient", which allows the connection even if the SSL
+           Certificate is invalid (MITM Vulnerability).
+           References:
+           (1)A View To A Kill: WebView Exploitation: https://www.iseclab.org/papers/webview_leet13.pdf
+           (2)OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           (3)https://jira.appcelerator.org/browse/TIMOB-4488
+           Vulnerable codes:
+               Lcom/igg/android/web/BrowserWebActivity$UriWebViewClient;->onReceivedSslError(Landroid/webkit/WebView;
+                    Landroid/webkit/SslErrorHandler; Landroid/net/http/SslError;)V
+[Critical] <SSL_Security> SSL Certificate Verification Checking:
+           This app DOES NOT check the validation of SSL Certificate. It allows self-signed, expired or mismatch CN certificates for SSL
+           connection.
+           This is a critical vulnerability and allows attackers to do MITM attacks without your knowledge.
+           If you are transmitting users' username or password, these sensitive information may be leaking.
+           Reference:
+           (1)OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           (2)Android Security book: http://goo.gl/BFb65r
+           (3)https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=134807561
+           This vulnerability is much more severe than Apple's "goto fail" vulnerability: http://goo.gl/eFlovw
+           Please do not try to create a "X509Certificate" and override "checkClientTrusted", "checkServerTrusted", and "getAcceptedIssuers"
+           functions with blank implementation.
+           We strongly suggest you use the existing API instead of creating your own X509Certificate class.
+           Please modify or remove these vulnerable code:
+               [Confirm Vulnerable]
+               => Lcom/google/api/client/util/SslUtils$1;
+                     -> used by: Lcom/google/api/client/util/SslUtils;->trustAllSSLContext()Ljavax/net/ssl/SSLContext;
+[Critical] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking:
+           Found a critical WebView "addJavascriptInterface" vulnerability. This method can be used to allow JavaScript to control the host
+           application.
+           This is a powerful feature, but also presents a security risk for applications targeted to API level JELLY_BEAN(4.2) or below,
+           because JavaScript could use reflection to access an injected object's public fields. Use of this method in a WebView containing
+           untrusted content could allow an attacker to manipulate the host application in unintended ways, executing Java code with the
+           permissions of the host application.
+           Reference:
+             1."http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface(java.lang.Object,
+           java.lang.String) "
+             2.https://labs.mwrinfosecurity.com/blog/2013/09/24/webview-addjavascriptinterface-remote-code-execution/
+             3.http://50.56.33.56/blog/?p=314
+             4.http://blog.trustlook.com/2013/09/04/alert-android-webview-addjavascriptinterface-code-execution-vulnerability/
+           Please modify the below code:
+               => Lcom/google/android/gms/internal/zzle;-><init>(Lcom/google/android/gms/internal/zzle$zza;
+                    Lcom/google/android/gms/ads/internal/client/AdSizeParcel; Z Z Lcom/google/android/gms/internal/zzaq;
+                    Lcom/google/android/gms/ads/internal/util/client/VersionInfoParcel; Lcom/google/android/gms/internal/zzdc;
+                    Lcom/google/android/gms/ads/internal/zzs; Lcom/google/android/gms/ads/internal/zzd;)V (0x102) --->
+                    Lcom/google/android/gms/internal/zzle;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task; (0x56) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/facebook/appevents/AppEventsLogger;->augmentWebView(Landroid/webkit/WebView; Landroid/content/Context;)V (0xa6) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/igg/android/web/BrowserWebActivity;->addJavascriptInterface(Landroid/webkit/WebView;)V (0x1a) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+[Warning]  Dynamic Code Loading:
+           Dynamic code loading(DexClassLoader) found:
+               => Lcom/google/android/gms/internal/zzav;->zzm(Ljava/lang/String;)Z (0x7c) --->
+                    Ldalvik/system/DexClassLoader;-><init>(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/ClassLoader;)V
+               => Lcom/google/android/gms/internal/zzbl;->zzaT()V (0x24) --->
+                    Ldalvik/system/DexClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
+[Warning]  External Storage Accessing:
+           External storage access found (Remember DO NOT write important files to external storages):
+               => Lcom/facebook/internal/Utility;->refreshAvailableExternalStorage()V (0xc) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/facebook/internal/Utility;->refreshTotalExternalStorage()V (0xc) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/google/android/gms/internal/zzcw;-><init>(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/util/Map;)V (0x70) ---> Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/android/web/BrowserWebActivity;->getSDCardRootPath()Ljava/lang/String; (0xc) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/iggsdkbusiness/IGGSDKPlugin;->GetObbDir()Ljava/lang/String; (0x2e) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistADID(Ljava/lang/String;)V (0x60) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistADID(Ljava/lang/String;)V (0x8a) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistADIDFile()Ljava/io/File; (0xe) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistUUID(Ljava/lang/String;)V (0x60) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistUUID(Ljava/lang/String;)V (0x8a) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->persistUUIDFile()Ljava/io/File; (0xe) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->restoreADID()Ljava/lang/String; (0x58) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/sdk/IGGIdsManager;->restoreUUID()Ljava/lang/String; (0x58) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/util/UUIDUtil;->getUUID(Landroid/content/Context;)Ljava/lang/String; (0xb6) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/util/UUIDUtil;->getUUID(Landroid/content/Context;)Ljava/lang/String; (0xe0) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/igg/util/UUIDUtil;->getUUID(Landroid/content/Context;)Ljava/lang/String; (0x150) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/unity3d/player/UnityPlayer;->a(Landroid/content/Context;)[Ljava/lang/String; (0x42) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/unity3d/plugin/downloader/b/m;->a(Ljava/lang/String;)Ljava/io/File; (0x1e) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/unity3d/plugin/downloader/b/m;->a(Landroid/content/Context;)Ljava/lang/String; (0x1e) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/unity3d/plugin/downloader/b/m;->b(Ljava/lang/String;)Z (0x2c) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+[Warning] <Sensitive_Information> Getting ANDROID_ID:
+           This app has code getting the 64-bit number "Settings.Secure.ANDROID_ID".
+           ANDROID_ID seems a good choice for a unique device identifier. There are downsides: First, it is not 100% reliable on releases of
+           Android prior to 2.2 (Froyo).
+           Also, there has been at least one widely-observed bug in a popular handset from a major manufacturer, where every instance has
+           the same ANDROID_ID.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lcom/appsflyer/AppsFlyerLib;->Ë(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/String; Z Landroid/content/SharedPreferences; Z Landroid/content/Intent;)Ljava/util/Map; (0x1768) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/ads/internal/util/client/zza;->zzP(Landroid/content/Context;)Ljava/lang/String; (0x30) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/igg/sdk/promotion/IGGPromotionService;->initialize(Landroid/content/Context;
+                    Lcom/igg/sdk/promotion/listener/IGGInitializationListener;)V (0x10) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/igg/sdk/service/IGGMobileDeviceService;->registerDevice(Landroid/content/Context; Ljava/lang/String;
+                    Ljava/lang/String; Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Lcom/igg/sdk/service/IGGMobileDeviceService$DeviceRegistrationListener;)V (0x306) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/igg/sdk/service/IGGMobileDeviceService;->registerDevice(Landroid/content/Context; Ljava/lang/String;
+                    Ljava/lang/String; Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Lcom/igg/sdk/service/IGGMobileDeviceService$DeviceRegistrationListener;)V (0x334) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/unity3d/plugin/downloader/c/m;->run()V (0x2c) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+[Warning] <WebView> WebView Local File Access Attacks Checking:
+           Found "setAllowFileAccess(true)" or not set(enabled by default) in WebView. The attackers could inject malicious script into
+           WebView and exploit the opportunity to access local resources. This can be mitigated or prevented by disabling local file system
+           access. (It is enabled by default)
+           Note that this enables or disables file system access only. Assets and resources are still accessible using file:///android_asset
+           and file:///android_res.
+           The attackers can use "mWebView.loadUrl("file:///data/data/[Your_Package_Name]/[File]");" to access app's local file.
+           Reference: (1)https://labs.mwrinfosecurity.com/blog/2012/04/23/adventures-with-android-webviews/
+                      (2)http://developer.android.com/reference/android/webkit/WebSettings.html#setAllowFileAccess(boolean)
+           Please add or modify "yourWebView.getSettings().setAllowFileAccess(false)" to your WebView:
+               Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task;
+               Lcom/facebook/internal/WebDialog;->setUpWebView(I)V
+               Lcom/google/android/gms/ads/internal/zzt;->zzbX()V
+               Lcom/google/android/gms/internal/zzcg$2;->run()V
+               Lcom/google/android/gms/internal/zzhf;->zzhg()Landroid/webkit/WebView;
+               Lcom/google/android/gms/internal/zzka;->zzD(Landroid/content/Context;)Ljava/lang/String;
+               Lcom/google/android/gms/internal/zzka;->zza(Landroid/content/Context; Ljava/lang/String; Landroid/webkit/WebSettings;)V
+               Lcom/google/android/gms/internal/zzkb$zzb$1;->zzji()Ljava/lang/Boolean;
+               Lcom/google/android/gms/internal/zzkb$zzd;->getDefaultUserAgent(Landroid/content/Context;)Ljava/lang/String;
+               Lcom/google/android/gms/internal/zzkb$zzd;->zza(Landroid/content/Context; Landroid/webkit/WebSettings;)Z
+               Lcom/google/android/gms/internal/zzkb$zzf;->zza(Landroid/content/Context; Landroid/webkit/WebSettings;)Z
+               Lcom/igg/android/web/BrowserWebActivity$UriWebViewClient;->onPageFinished(Landroid/webkit/WebView; Ljava/lang/String;)V
+               Lcom/igg/android/web/BrowserWebActivity;->initWebView(Landroid/webkit/WebView;)V
+               Lcom/igg/iggsdkbusiness/IGGWebView;->onCreate(Landroid/os/Bundle;)V
+               Lcom/igg/iggsdkbusiness/MainActivity;->onCreate(Landroid/os/Bundle;)V
+[Warning] <WebView> WebView Potential XSS Attacks Checking:
+           Found "setJavaScriptEnabled(true)" in WebView, which could exposed to potential XSS attacks. Please check the web page code
+           carefully and sanitize the output:
+               => Lbolts/WebViewAppLinkResolver$2;->then(Lbolts/Task;)Lbolts/Task; (0x2c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/facebook/internal/WebDialog;->setUpWebView(I)V (0x64) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/ads/internal/zzt;->zzbX()V (0x20) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/internal/zzhf;->zzhg()Landroid/webkit/WebView; (0x18) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/internal/zzle;-><init>(Lcom/google/android/gms/internal/zzle$zza;
+                    Lcom/google/android/gms/ads/internal/client/AdSizeParcel; Z Z Lcom/google/android/gms/internal/zzaq;
+                    Lcom/google/android/gms/ads/internal/util/client/VersionInfoParcel; Lcom/google/android/gms/internal/zzdc;
+                    Lcom/google/android/gms/ads/internal/zzs; Lcom/google/android/gms/ads/internal/zzd;)V (0x8a) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/igg/android/web/BrowserWebActivity;->initWebView(Landroid/webkit/WebView;)V (0x5c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/igg/iggsdkbusiness/IGGWebView;->onCreate(Landroid/os/Bundle;)V (0x15c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+[Notice]  AndroidManifest Adb Backup Checking:
+           ADB Backup is ENABLED for this app (default: ENABLED). ADB Backup is a good tool for backing up all of your files. If it's open
+           for this app, people who have your phone can copy all of the sensitive data for this app in your phone (Prerequisite: 1.Unlock
+           phone's screen 2.Open the developer mode). The sensitive data may include lifetime access token, username or password, etc.
+           Security case related to ADB Backup:
+           1.http://www.securityfocus.com/archive/1/530288/30/0/threaded
+           2.http://blog.c22.cc/advisories/cve-2013-5112-evernote-android-insecure-storage-of-pin-data-bypass-of-pin-protection/
+           3.http://nelenkov.blogspot.co.uk/2012/06/unpacking-android-backups.html
+           Reference: http://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+[Notice] <Database><#CVE-2011-3901#> Android SQLite Databases Vulnerability Checking:
+           This app is using Android SQLite databases but it's "NOT" suffering from SQLite Journal Information Disclosure Vulnerability.
+[Notice]  File Unsafe Delete Checking:
+           Everything you delete may be recovered by any user or attacker, especially rooted devices.
+           Please make sure do not use "file.delete()" to delete essential files.
+           Check this video: https://www.youtube.com/watch?v=tGw1fxUD-uY
+               => Lcom/appsflyer/cache/CacheManager;->deleteRequest(Ljava/lang/String; Landroid/content/Context;)V (0x60) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/appsflyer/t;->Ë(Ljava/lang/ref/WeakReference;)Ljava/lang/String; (0x18a) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x5a) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x9c) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0xde) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->readAndClearStore()Lcom/facebook/appevents/PersistedEvents; (0x10c) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/appevents/AppEventStore;->saveEventsToDisk(Lcom/facebook/appevents/PersistedEvents;)V (0x58) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$1;->onClose()V (0x24) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$2;->run()V (0x10) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache$BufferFile;->deleteAll(Ljava/io/File;)V (0x20) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->renameToTargetAndTrim(Ljava/lang/String; Ljava/io/File;)V (0x22) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->trim()V (0x194) ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/FileLruCache;->openPutStream(Ljava/lang/String; Ljava/lang/String;)Ljava/io/OutputStream; (0x10)
+                    ---> Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/NativeAppCallAttachmentStore;->addAttachments(Ljava/util/Collection;)V (0xea) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/facebook/internal/Utility;->deleteDirectory(Ljava/io/File;)V (0x3e) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/common/data/BitmapTeleporter;->zzsQ()Ljava/io/FileOutputStream; (0x46) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzav;->zza(Ljava/io/File;)V (0x38) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzex;->zzY(Ljava/lang/String;)Z (0x344) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzex;->zzfg()Z (0x66) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzex;->zzfg()Z (0x82) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzv;->zzc(I)V (0x86) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzv;->initialize()V (0xb4) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzv;->remove(Ljava/lang/String;)V (0xa) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/zzv;->zza(Ljava/lang/String; Lcom/google/android/gms/internal/zzb$zza;)V (0x68) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/unity3d/player/PsmMainActivity;->a(Ljava/io/File;)V (0x2c) ---> Ljava/io/File;->delete()Z
+               => Lcom/unity3d/plugin/downloader/c/j;->a(Lcom/unity3d/plugin/downloader/c/o; Ljava/lang/String; J)Z (0x42) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/unity3d/plugin/downloader/b/m;->a(Landroid/content/Context; Ljava/lang/String; J)Z (0x32) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/unity3d/plugin/downloader/c/e;->a(Lcom/unity3d/plugin/downloader/c/h; I)V (0x28) ---> Ljava/io/File;->delete()Z
+               => Lcom/unity3d/plugin/downloader/c/e;->a()V (0x178) ---> Ljava/io/File;->delete()Z
+               => Lcom/unity3d/plugin/downloader/c/e;->a()V (0x2ec) ---> Ljava/io/File;->delete()Z
+[Notice] <Hacker> APK Installing Source Checking:
+           This app has code checking APK installer sources(e.g. from Google Play, from Amazon, etc.). It might be used to check for whether
+           the app is hacked by the attackers.
+               => Lcom/appsflyer/AppsFlyerLib;->Ë(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/String; Z Landroid/content/SharedPreferences; Z Landroid/content/Intent;)Ljava/util/Map; (0x552) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/facebook/internal/AttributionIdentifiers;->getInstallerPackageName(Landroid/content/Context;)Ljava/lang/String;
+                    (0x14) ---> Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+[Notice] <KeyStore><Hacker> KeyStore Protection Information:
+           The Keystores below are "protected" by password and seem using SSL-pinning (Total: 1). You can use "Portecle" tool to manage the
+           certificates in the KeyStore:
+               => Lcom/google/api/client/util/SecurityUtils;->loadKeyStore(Ljava/security/KeyStore; Ljava/io/InputStream;
+                    Ljava/lang/String;)V (0x8) ---> Ljava/security/KeyStore;->load(Ljava/io/InputStream; [C)V
+[Notice] <Signature><Hacker> Getting Signature Code Checking:
+           This app has code checking the package signature in the code. It might be used to check for whether the app is hacked by the
+           attackers.
+               => Lcom/facebook/FacebookSdk;->getApplicationSignature(Landroid/content/Context;)Ljava/lang/String; (0x26) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/facebook/internal/FacebookSignatureValidator;->validateSignature(Landroid/content/Context; Ljava/lang/String;)Z
+                    (0x3a) ---> Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/zze;->isGooglePlayServicesAvailable(Landroid/content/Context;)I (0x48) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/util/zzy;->zze(Landroid/content/Context; I)Z (0x24) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/igg/iggsdkbusiness/FBHelp/FacebookHelper;->Hashkey()V (0x1a) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+[Notice]  Native Library Loading Checking:
+           Native library loading codes(System.loadLibrary(...)) found:
+               [libgpg.so]
+               => Lcom/google/games/bridge/NativeBridgeActivity;-><clinit>()V (0x4) --->
+                    Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libmain.so]
+               => Lcom/unity3d/player/UnityPlayer;-><clinit>()V (0x20) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+[Notice]  AndroidManifest Exported Components Checking 2:
+           Found "exported" components(except for Launcher) for receiving Google's "Android" actions (AndroidManifest.xml):
+                 activity => com.facebook.CustomTabActivity
+                 activity => com.igg.iggsdkbusiness.IggGameIMAuth.AuthActivity
+                 receiver => com.appsflyer.MultipleInstallBroadcastReceiver
+[Info] <Command> Runtime Command Checking:
+           This app is not using critical function 'Runtime.getRuntime().exec("...")'.
+[Info] <Command> Executing "root" or System Privilege Checking:
+           Did not find codes checking "root" permission(su) or getting system permission (It's still possible we did not find out).
+[Info] <Database> SQLiteDatabase Transaction Deprecated Checking:
+           Ignore checking "SQLiteDatabase:beginTransactionNonExclusive" because your set minSdk >= 11.
+[Info] <Database> Android SQLite Databases Encryption (SQLite Encryption Extension (SEE)):
+           This app is "NOT" using SQLite Encryption Extension (SEE) on Android (http://www.sqlite.org/android) to encrypt or decrpyt
+           databases.
+[Info] <Database> Android SQLite Databases Encryption (SQLCipher):
+           This app is "NOT" using SQLCipher(http://sqlcipher.net/) to encrypt or decrpyt databases.
+[Info] <Debug> Android Debug Mode Checking:
+           DEBUG mode is OFF(android:debuggable="false") in AndroidManifest.xml.
+[Info] <#BID 64208, CVE-2013-6271#> Fragment Vulnerability Checking:
+           Did not detect the vulnerability of "Fragment" dynamically loading into "PreferenceActivity" or "SherlockPreferenceActivity"
+[Info] <Framework> Framework - MonoDroid:
+           This app is NOT using MonoDroid Framework (http://xamarin.com/android).
+[Info] <Database><Hacker> Key for Android SQLite Databases Encryption:
+           Did not find using the symmetric key(PRAGMA key) to encrypt the SQLite databases (It's still possible that it might use but we
+           did not find out).
+[Info] <Debug><Hacker> Codes for Checking Android Debug Mode:
+           Did not detect codes for checking "ApplicationInfo.FLAG_DEBUGGABLE" in AndroidManifest.xml.
+[Info] <KeyStore><Hacker> KeyStore File Location:
+           Did not find any possible BKS keystores or certificate keystore file (Notice: It does not mean this app does not use keysotre):
+[Info] <Hacker> Code Setting Preventing Screenshot Capturing:
+           Did not detect this app has code setting preventing screenshot capturing.
+[Info]  HttpURLConnection Android Bug Checking:
+           Ignore checking "http.keepAlive" because you're not using "HttpURLConnection" and min_Sdk > 8.
+[Info] <KeyStore> KeyStore Type Checking:
+           KeyStore 'BKS' type check OK
+[Info]  Google Cloud Messaging Suggestion:
+           Nothing to suggest.
+[Info] <#CVE-2013-4787#> Master Key Type I Vulnerability:
+           No Master Key Type I Vulnerability in this APK.
+[Info]  AndroidManifest Dangerous ProtectionLevel of Permission Checking:
+           No "dangerous" protection level customized permission found (AndroidManifest.xml).
+[Info]  AndroidManifest PermissionGroup Checking:
+           PermissionGroup in permission tag of AndroidManifest sets correctly.
+[Info] <Implicit_Intent> Implicit Service Checking:
+           No dangerous implicit service.
+[Info]  AndroidManifest "intent-filter" Settings Checking:
+           "intent-filter" of AndroidManifest.xml check OK.
+[Info]  AndroidManifest Normal ProtectionLevel of Permission Checking:
+           No default or "normal" protection level customized permission found (AndroidManifest.xml).
+[Info] <#CVE-2013-6272#> AndroidManifest Exported Lost Prefix Checking:
+           No exported components that forgot to add "android:" prefix.
+[Info]  AndroidManifest ContentProvider Exported Checking:
+           No exported "ContentProvider" found (AndroidManifest.xml).
+[Info] <Sensitive_Information> Getting IMEI and Device ID:
+           Did not detect this app is getting the "device id(IMEI)" by "TelephonyManager.getDeviceId()" approach.
+[Info]  Codes for Sending SMS:
+           Did not detect this app has code for sending SMS messages (sendDataMessage, sendMultipartTextMessage or sendTextMessage).
+[Info] <System> AndroidManifest sharedUserId Checking:
+           This app does not use "android.uid.system" sharedUserId.
+[Info] <SSL_Security> SSL Implementation Checking (Insecure component):
+           Did not detect SSLSocketFactory by insecure method "getInsecure".
+[Info] <SSL_Security> SSL Implementation Checking (HttpHost):
+           DEFAULT_SCHEME_NAME for HttpHost check: OK
+[Info]  Unnecessary Permission Checking:
+           Permission 'android.permission.ACCESS_MOCK_LOCATION' sets correctly.
+[Info]  Accessing the Internet Checking:
+           This app is using the Internet via HTTP protocol.
+[Info]  AndroidManifest System Use Permission Checking:
+           No system-level critical use-permission found
