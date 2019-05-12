@@ -1,4 +1,6 @@
 # Recent Discoveries:
+Full List: [Here](https://gist.github.com/PerilGroup)
+
 | Appliction | Report |
 | ------ | ------ |
 | BrawlStars | [Check Report](https://gist.github.com/PerilGroup/ef333c3452d975801de46ff4e2b4179c) |
